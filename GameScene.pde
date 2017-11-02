@@ -6,7 +6,7 @@ int    ENERGY_BAR_SHRINK  = 4;
 float  ENERGY_BAR_MULTI   = 9.0f / 10.0f;
 color  ENERGY_COLOR       = color(111, 65, 192);
 
-float STUN_DURATION = 3.0f;
+float STUN_DURATION = 3.1f;
 
 class GameScene extends Scene {
   int energy, energyMax;
