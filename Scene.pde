@@ -5,20 +5,28 @@
 abstract class Scene {
   PImage background;
   Eye eye;
+  int brightnessAvg;
   
   Scene (PImage _bg, Eye _eye) {
     background = _bg;
     eye = _eye;
+    brightnessAvg = 255;
   }
   
   void gameLoop (Capture cam) {
-    int brightnessAvg = getColorAverage(cam);
+    brightnessAvg = getColorAverage(cam);
     
-    image(background, 0, 0, width, height);
-    
-    eye.render(brightnessAvg);
+    sceneRender();
     eyeBehaviour();
+    eye.render(brightnessAvg);
+    guiRender();
   }
   
   abstract void eyeBehaviour();
+  
+  void sceneRender () {
+    image(background, 0, 0, width, height);
+  }
+  
+  void guiRender () {}
 }
