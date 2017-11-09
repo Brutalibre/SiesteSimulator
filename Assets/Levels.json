@@ -1,0 +1,38 @@
+[
+	{
+		"timeStart": 0,
+		"timeEnd": 6000,
+		"posStart": 0,
+		"posEnd": 1
+	},
+	{
+		"timeStart": 7000,
+		"timeEnd": 10000,
+		"posStart": 1,
+		"posEnd": 2
+	},
+	{
+		"timeStart": 11000,
+		"timeEnd": 12000,
+		"posStart": 2,
+		"posEnd": 3
+	},
+	{
+		"timeStart": 13000,
+		"timeEnd": 15000,
+		"posStart": 3,
+		"posEnd": 2
+	},
+	{
+		"timeStart": 16000,
+		"timeEnd": 19000,
+		"posStart": 2,
+		"posEnd": 1
+	},
+	{
+		"timeStart": 20000,
+		"timeEnd": 23000,
+		"posStart": 1,
+		"posEnd": 2
+	}
+]

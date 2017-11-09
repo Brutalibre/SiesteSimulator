@@ -5,15 +5,27 @@
 
 class StaticScene extends Scene {
   int nextScene;
+  float stunDuration;
   
-  StaticScene(PImage _bg, Eye _eye, int _nextScene) {
-    super(_bg, _eye);
+  StaticScene(PImage _bg, Eye _eye, PApplet app, int _nextScene, float _stunDuration) {
+    super(_bg, _eye, app);
     nextScene = _nextScene;
+    stunDuration = _stunDuration;
   }
   
   void eyeBehaviour() {
-    if (eye.isClosed) {
-      activeScene = scenes[nextScene];
+    if (firstRender)
+      stunTimer.start();
+    
+    if (stunOpen()) {
+      brightnessAvg = 255;
+    } 
+    else if (eye.isClosed) {
+      activateScene(nextScene);
     }
+  }
+  
+  boolean stunOpen() {
+    return (stunTimer.second() < stunDuration);
   }
 }

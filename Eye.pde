@@ -3,7 +3,7 @@ int MAX_LUM = 255/2;
 int CLOSED_LUM = MAX_LUM / 4;
 float EYE_WIDTH_MULTIPLIER  = 1.65;
 float EYE_HEIGHT_MULTIPLIER = 1.65;
-String EYE_SHAPE = "eyeContour.svg";
+String EYE_SHAPE = "Assets/eyeContour.svg";
 
 class Eye {
   float baseWidth, baseHeight;
