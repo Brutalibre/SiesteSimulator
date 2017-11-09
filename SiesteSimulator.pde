@@ -20,20 +20,16 @@ Capture cam;
 Stopwatch timer;
 
 void setup () {
-  fullScreen(FX2D);
+  //fullScreen(FX2D);
+  size(1200, 675, FX2D);
   
   String[] cameras = Capture.list();
   cam = new Capture(this, cameras[0]);
   cam.start();
   
-  teacher = new Teacher(new Stopwatch(this));
-  
   scenes = new Scene[NB_SCENES];
   
-  scenes[MENU] = new StaticScene(loadImage("Assets/titre.jpg"),      new Eye(), GAME);
-  scenes[GAME] = new   GameScene(loadImage("Assets/background.jpg"), new Eye(), WIN, LOSE);
-  scenes[WIN]  = new StaticScene(loadImage("Assets/gg.jpg"),         new Eye(), MENU);
-  scenes[LOSE] = new StaticScene(loadImage("Assets/Perdu.jpg"),      new Eye(), GAME);
+  resetGame();
   
   activeScene = scenes[MENU];
   
@@ -52,10 +48,21 @@ void draw () {
       
       activeScene.gameLoop(cam);
       
-      fill(255);
-      text(frameRate, 10, 10);
-      
       timer.restart();
     }
   }
+}
+
+void resetGame() {
+  
+  teacher = new Teacher(new Stopwatch(this));
+  scenes[GAME] = new   GameScene(loadImage("Assets/background.jpg"), new Eye(), this, WIN, LOSE, teacher);
+  scenes[MENU] = new StaticScene(loadImage("Assets/titre.jpg"),      new Eye(), this, GAME, 0.5f);
+  scenes[WIN]  = new StaticScene(loadImage("Assets/gg.jpg"),         new Eye(), this, MENU, 2.0f);
+  scenes[LOSE] = new StaticScene(loadImage("Assets/Perdu.jpg"),      new Eye(), this, MENU, 2.0f);
+}
+
+void activateScene(int scene) {
+  resetGame();
+  activeScene = scenes[scene];
 }

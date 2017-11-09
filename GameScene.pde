@@ -11,22 +11,24 @@ String LAST_TABLE_ASSET = "Assets/dernierrang.png";
 
 float STUN_DURATION = 3000.0f;
 
-float POINTS_ADD = 1.0f;
-float POINTS_SUB = 1.0f;
+float POINTS_ADD = 1.5f;
+float POINTS_SUB = 1f;
 
 class GameScene extends Scene {
-  int energy, energyMax;
+  float energy;
+  int energyMax;
   PImage energyBarBg, energyBarOv;
   
   PImage tables, lastTable;
   
   boolean isStunned;
-  float stunTimer;
   
   int winScene, loseScene;
+  
+  Teacher teacher;
 
-  GameScene (PImage _bg, Eye _eye, int _winScene, int _loseScene) {
-    super(_bg, _eye);
+  GameScene (PImage _bg, Eye _eye, PApplet app, int _winScene, int _loseScene, Teacher _teacher) {
+    super(_bg, _eye, app);
     
     energy = BASE_ENERGY;
     energyMax = ENERGY_MAX;
@@ -36,18 +38,47 @@ class GameScene extends Scene {
     tables = loadImage(TABLES_ASSET);
     lastTable = loadImage(LAST_TABLE_ASSET);
     
-    stunTimer = 0;
+    stunTimer.pause();
     
     winScene = _winScene;
     loseScene = _loseScene;
+    
+    teacher = _teacher;
   }
 
   void sceneRender() {
+    if (firstRender) {
+      teacher.startTimer();
+    }
+    
+    // This stops the rendering of the current scene to directly jump to the winning scene.
+    if (teacher.checkWin()) {
+      activateScene(winScene);
+      return;
+    }
+    
+    if (checkLose()) {
+      activateScene(loseScene);
+      return;
+    }
+    
     image(background, 0, 0, width, height);
-    // if "behind", draw teacher here
-    image(tables, 0, 0, width, height);
-    // if "front", draw teacher here
+      
+      // This means the teacher is behind the tables.
+    if (teacher.getCurrentZone() == SAFE || teacher.getCurrentZone() == ALERT) {
+      teacher.renderAtCurrentPosition();
+      image(tables, 0, 0, width, height);
+    }
+    else {
+      image(tables, 0, 0, width, height);
+      teacher.renderAtCurrentPosition();
+    }
+    
     image(lastTable, 0, 0, width, height);
+  }
+  
+  boolean checkLose() {
+    return teacher.getCurrentZone() == DANGER && eye.isClosed;
   }
 
   void eyeBehaviour() {
@@ -62,20 +93,19 @@ class GameScene extends Scene {
       
     // If the energy falls to 0, the student falls asleep for some time.
     // If the stunTimer is not 0, it means that the student is already asleep.
-    else if (energy <= 0 || stunTimer != 0.0f)  {
-      // Normalize the energy level so it is never negative.
-      energy = 0;
-      
+    else if (energy <= 0 || !stunTimer.isPaused())  {
       // Simulate a low brightness so the eye appears as closed.
       brightnessAvg = 0;
       
       // Energy is 0 and timer has not been initialized yet
-      if (stunTimer == 0.0f)
-        stunTimer = millis();
-        
+      if (stunTimer.isPaused()) {
+        stunTimer.restart();
+      }
       // Energy is not 0 anymore but timer is still running : test with stun duration to reset it.
-      else if (stunIsOver())
-        stunTimer = 0.0f;
+      else if (stunIsOver()) {
+        stunTimer.reset();
+        println(stunTimer.millis());
+      }
     }
   }
   
@@ -101,6 +131,6 @@ class GameScene extends Scene {
   }
   
   boolean stunIsOver() {
-    return millis() - stunTimer > STUN_DURATION;
+    return (stunTimer.second() * 1000 + stunTimer.millis()) >= STUN_DURATION;
   }
 }

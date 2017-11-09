@@ -7,19 +7,30 @@ abstract class Scene {
   Eye eye;
   int brightnessAvg;
   
-  Scene (PImage _bg, Eye _eye) {
+  boolean firstRender;
+  Stopwatch stunTimer;
+  
+  Scene (PImage _bg, Eye _eye, PApplet app) {
     background = _bg;
     eye = _eye;
     brightnessAvg = 255;
+    
+    stunTimer = new Stopwatch(app);
+    
+    firstRender = true;
   }
   
   void gameLoop (Capture cam) {
+    
     brightnessAvg = getColorAverage(cam);
     
     sceneRender();
     eyeBehaviour();
     eye.render(brightnessAvg);
     guiRender();
+    
+    if (firstRender) 
+      firstRender = false;
   }
   
   abstract void eyeBehaviour();
