@@ -138,12 +138,6 @@
 		"posEnd": 1
 	},
        {
-		"timeStart":56000,
-		"timeEnd": 59000,
-		"posStart": 0,
-		"posEnd": 1
-	},
-       {
 		"timeStart":60000,
 		"timeEnd": 62000,
 		"posStart": 1,
@@ -234,12 +228,6 @@
 		"posEnd": 2
 	},
        {
-		"timeStart":96500,
-		"timeEnd": 97500,
-		"posStart": 3,
-		"posEnd": 2
-	},
-       {
 		"timeStart":99000,
 		"timeEnd": 101000,
 		"posStart": 2,
@@ -277,13 +265,13 @@
 	},
        {
 		"timeStart":114000,
-		"timeEnd": 115500,
+		"timeEnd": 115000,
 		"posStart": 2,
 		"posEnd": 3
        },
        {
-		"timeStart":114000,
-		"timeEnd": 115500,
+		"timeStart":115000,
+		"timeEnd": 116000,
 		"posStart": 3,
 		"posEnd": 2
 	},
