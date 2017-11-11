@@ -21,14 +21,14 @@ class GameScene extends Scene {
   
   PImage tables, lastTable;
   
-  boolean isStunned;
+  boolean playCloseSound;
   
   int winScene, loseScene;
   
   Teacher teacher;
 
-  GameScene (PImage _bg, Eye _eye, PApplet app, int _winScene, int _loseScene, Teacher _teacher) {
-    super(_bg, _eye, app);
+  GameScene (PImage _bg, Eye _eye, PApplet _app, byte _bgSound, int _winScene, int _loseScene, Teacher _teacher) {
+    super(_bg, _eye, _app, _bgSound);
     
     energy = BASE_ENERGY;
     energyMax = ENERGY_MAX;
@@ -39,6 +39,8 @@ class GameScene extends Scene {
     lastTable = loadImage(LAST_TABLE_ASSET);
     
     stunTimer.pause();
+    
+    playCloseSound = true;
     
     winScene = _winScene;
     loseScene = _loseScene;
@@ -63,9 +65,11 @@ class GameScene extends Scene {
     }
     
     image(background, 0, 0, width, height);
+    
+    println(teacher.getCurrentZone());
       
       // This means the teacher is behind the tables.
-    if (teacher.getCurrentZone() == SAFE || teacher.getCurrentZone() == ALERT) {
+    if (teacher.getCurrentZone() == SAFE_ZONE || teacher.getCurrentZone() == ALERT_ZONE) {
       teacher.renderAtCurrentPosition();
       image(tables, 0, 0, width, height);
     }
@@ -78,7 +82,7 @@ class GameScene extends Scene {
   }
   
   boolean checkLose() {
-    return teacher.getCurrentZone() == DANGER && eye.isClosed;
+    return teacher.getCurrentZone() == DANGER_ZONE && eye.isClosed;
   }
 
   void eyeBehaviour() {
@@ -97,17 +101,35 @@ class GameScene extends Scene {
       // Simulate a low brightness so the eye appears as closed.
       brightnessAvg = 0;
       
-      // Energy is 0 and timer has not been initialized yet
+      // Energy is 0 and timer has not been initialized yet : start watch + play sound.
       if (stunTimer.isPaused()) {
         stunTimer.restart();
+        soundFiles[SLEEP_SOUND].stop();
+        soundFiles[STUN_SOUND].play();
       }
-      // Energy is not 0 anymore but timer is still running : test with stun duration to reset it.
+      // Energy is not 0 anymore but timer is still running : test with stun duration to reset it + play wake sound.
       else if (stunIsOver()) {
         stunTimer.reset();
-        println(stunTimer.millis());
       }
+    
     }
+
+
+    // Check which sound to play.
+    if (energy <= 0 && stunTimer.isPaused())  {
+        soundFiles[STUN_SOUND].play();
+    }
+    else if (playCloseSound && eye.isClosed) {
+        playCloseSound = false;
+        soundFiles[SLEEP_SOUND].play();
+    } 
+    else if (!playCloseSound && !eye.isClosed) {
+        playCloseSound = true;
+        soundFiles[WAKE_SOUND].play();
+    }
+  
   }
+  
   
   void guiRender () {
     imageMode(CENTER);

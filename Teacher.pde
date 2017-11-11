@@ -1,9 +1,9 @@
 String TEACHER_ASSET =   "Assets/jose.png";
 String MOVEMENTS_ASSET = "Assets/Levels.json";
 
-byte SAFE = 0;
-byte ALERT = 1;
-byte DANGER = 2;
+byte SAFE_ZONE = 0 + 1;
+byte ALERT_ZONE = 1 + 2;
+byte DANGER_ZONE = 2 + 3;
 
 /*
  * This class describes the main antagonist, the teacher.
@@ -27,7 +27,7 @@ class Teacher {
   PImage sprite;
   
   Teacher (Stopwatch _levelTimer) {
-    currentPos = ZONE_POS[SAFE];
+    currentPos = ZONE_POS[SAFE_ZONE];
     levelTimer = _levelTimer;
     
     sprite = loadImage(TEACHER_ASSET);
@@ -42,7 +42,7 @@ class Teacher {
       Position posEnd = ZONE_POS[mvt.getInt("posEnd")];
       int timeStart = mvt.getInt("timeStart");
       int timeEnd = mvt.getInt("timeEnd");
-      int zone = mvt.getInt("posStart");
+      int zone = mvt.getInt("posStart") + mvt.getInt("posEnd");
       
       movements.add(new Movement(posStart, posEnd, timeStart, timeEnd, zone));
     }

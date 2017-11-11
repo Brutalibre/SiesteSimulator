@@ -10,12 +10,15 @@ abstract class Scene {
   boolean firstRender;
   Stopwatch stunTimer;
   
-  Scene (PImage _bg, Eye _eye, PApplet app) {
+  SoundFile bgSound;
+  
+  Scene (PImage _bg, Eye _eye, PApplet app, byte _sound) {
     background = _bg;
     eye = _eye;
     brightnessAvg = 255;
     
     stunTimer = new Stopwatch(app);
+    bgSound = soundFiles[_sound];
     
     firstRender = true;
   }
@@ -29,8 +32,10 @@ abstract class Scene {
     eye.render(brightnessAvg);
     guiRender();
     
-    if (firstRender) 
+    if (firstRender) {
+      bgSound.loop();
       firstRender = false;
+    }
   }
   
   abstract void eyeBehaviour();

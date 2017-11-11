@@ -1,14 +1,26 @@
 import processing.video.*;
 import lord_of_galaxy.timing_utils.*;
+import processing.sound.*;
 
-final int MENU = 0;
-final int GAME = 1;
-final int  WIN = 2;
-final int LOSE = 3;
+final byte MENU = 0;
+final byte GAME = 1;
+final byte  WIN = 2;
+final byte LOSE = 3;
 
-final int NB_SCENES = 4;
+final byte NB_SCENES = 4;
 
-final int FRAME_INTERVAL = 100;
+final byte FRAME_INTERVAL = 100;
+
+AudioDevice device;
+SoundFile[] soundFiles;
+
+final byte SLEEP_SOUND = 0;
+final byte STUN_SOUND = 1;
+final byte WAKE_SOUND = 2;
+final byte VICTORY_SOUND = 3;
+final byte DEFEAT_SOUND = 4;
+
+final String[] SOUNDS = {"Sleep", "Stun", "Wake", "Victory", "Defeat"};
 
 Scene[] scenes;
 Scene activeScene;
@@ -22,6 +34,12 @@ Stopwatch timer;
 void setup () {
   //fullScreen(FX2D);
   size(1200, 675, FX2D);
+  
+  
+  device = new AudioDevice(this, 48000, 32);
+  soundFiles = new SoundFile[SOUNDS.length];
+  
+  initSounds(soundFiles);
   
   String[] cameras = Capture.list();
   cam = new Capture(this, cameras[0]);
@@ -53,16 +71,23 @@ void draw () {
   }
 }
 
-void resetGame() {
+void resetGame () {
   
   teacher = new Teacher(new Stopwatch(this));
-  scenes[GAME] = new   GameScene(loadImage("Assets/background.jpg"), new Eye(), this, WIN, LOSE, teacher);
-  scenes[MENU] = new StaticScene(loadImage("Assets/titre.jpg"),      new Eye(), this, GAME, 0.5f);
-  scenes[WIN]  = new StaticScene(loadImage("Assets/gg.jpg"),         new Eye(), this, MENU, 2.0f);
-  scenes[LOSE] = new StaticScene(loadImage("Assets/Perdu.jpg"),      new Eye(), this, MENU, 2.0f);
+  scenes[GAME] = new   GameScene(loadImage("Assets/background.jpg"), new Eye(), this, VICTORY_SOUND, WIN, LOSE, teacher);
+  scenes[MENU] = new StaticScene(loadImage("Assets/titre.jpg"),      new Eye(), this, VICTORY_SOUND, GAME, 0.5f);
+  scenes[WIN]  = new StaticScene(loadImage("Assets/gg.jpg"),         new Eye(), this, VICTORY_SOUND, MENU, 2.0f);
+  scenes[LOSE] = new StaticScene(loadImage("Assets/Perdu.jpg"),      new Eye(), this, DEFEAT_SOUND, MENU, 2.0f);
 }
 
-void activateScene(int scene) {
+void activateScene (int scene) {
   resetGame();
+  activeScene.bgSound.stop();
   activeScene = scenes[scene];
+}
+
+void initSounds (SoundFile[] file) {  
+  for (int i = 0; i < file.length; i++){
+    file[i] = new SoundFile(this, "Sounds/" + SOUNDS[i] + ".wav");
+  }
 }
