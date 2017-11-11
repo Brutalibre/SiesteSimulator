@@ -7,8 +7,8 @@ class StaticScene extends Scene {
   int nextScene;
   float stunDuration;
   
-  StaticScene(PImage _bg, Eye _eye, PApplet app, int _nextScene, float _stunDuration) {
-    super(_bg, _eye, app);
+  StaticScene(PImage _bg, Eye _eye, PApplet _app, byte _bgSound, int _nextScene, float _stunDuration) {
+    super(_bg, _eye, _app, _bgSound);
     nextScene = _nextScene;
     stunDuration = _stunDuration;
   }
