@@ -32,8 +32,8 @@ Capture cam;
 Stopwatch timer;
 
 void setup () {
-  //fullScreen(FX2D);
-  size(1200, 675, FX2D);
+  fullScreen(FX2D);
+  //size(1200, 675, FX2D);
   
   
   device = new AudioDevice(this, 48000, 32);
@@ -42,6 +42,7 @@ void setup () {
   initSounds(soundFiles);
   
   String[] cameras = Capture.list();
+  
   cam = new Capture(this, cameras[0]);
   cam.start();
   
