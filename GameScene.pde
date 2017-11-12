@@ -65,8 +65,6 @@ class GameScene extends Scene {
     }
     
     image(background, 0, 0, width, height);
-    
-    println(teacher.getCurrentZone());
       
       // This means the teacher is behind the tables.
     if (teacher.getCurrentZone() == SAFE_ZONE || teacher.getCurrentZone() == ALERT_ZONE) {
@@ -111,7 +109,6 @@ class GameScene extends Scene {
       else if (stunIsOver()) {
         stunTimer.reset();
       }
-    
     }
 
 
@@ -127,7 +124,6 @@ class GameScene extends Scene {
         playCloseSound = true;
         soundFiles[WAKE_SOUND].play();
     }
-  
   }
   
   

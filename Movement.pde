@@ -17,7 +17,7 @@ class Movement {
   }
   
   float mapTime (Stopwatch timer) {
-    return map(timer.second() * 1000 + timer.millis(), startTime, endTime, 0, 100);
+    return map(timer.minute() * 60000 + timer.second() * 1000 + timer.millis(), startTime, endTime, 0, 100);
   }  
   
   Position mapPosition (float percent) {
